@@ -1,0 +1,23 @@
+-- Indexes (run after schema.sql)
+CREATE INDEX idx_customers_tier          ON customers (tier_id);
+CREATE INDEX idx_customers_name          ON customers (last_name, first_name);
+CREATE INDEX idx_addresses_customer      ON addresses (customer_id);
+CREATE INDEX idx_categories_parent       ON categories (parent_category_id);
+CREATE INDEX idx_products_category       ON products (category_id, is_active);
+CREATE INDEX idx_product_suppliers_sup   ON product_suppliers (supplier_id);
+CREATE INDEX idx_inventory_product       ON inventory (product_id);
+CREATE INDEX idx_inventory_reorder       ON inventory (warehouse_id) WHERE quantity_on_hand <= reorder_level;
+CREATE INDEX idx_orders_customer_date    ON orders (customer_id, order_date DESC);
+CREATE INDEX idx_orders_date             ON orders (order_date);
+CREATE INDEX idx_orders_open_status      ON orders (status, order_date) WHERE status IN ('PENDING','PAID','PACKED','SHIPPED');
+CREATE INDEX idx_orders_promo            ON orders (promo_id) WHERE promo_id IS NOT NULL;
+CREATE INDEX idx_orders_ship_addr        ON orders (shipping_address_id);
+CREATE INDEX idx_order_items_product     ON order_items (product_id);
+CREATE INDEX idx_payments_order          ON payments (order_id);
+CREATE INDEX idx_shipments_order         ON shipments (order_id);
+CREATE INDEX idx_shipments_open          ON shipments (shipment_status) WHERE shipment_status <> 'DELIVERED';
+CREATE INDEX idx_po_supplier_status      ON purchase_orders (supplier_id, po_status);
+CREATE INDEX idx_poi_product             ON purchase_order_items (product_id);
+CREATE INDEX idx_reviews_product         ON product_reviews (product_id, rating);
+CREATE INDEX idx_invtxn_product_time     ON inventory_transactions (product_id, txn_at);
+CREATE INDEX idx_invtxn_reference        ON inventory_transactions (reference_type, reference_id);
